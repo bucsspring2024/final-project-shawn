@@ -1,19 +1,15 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=14601514&assignment_repo_type=AssignmentRepo)
-
-:warning: Everything between << >> needs to be replaced (remove << >> after replacing)
-
 # << Project Title >>
-## CS110 Final Project  << Semester, Year >>
+## CS110 Final Project  Spring, 2024
 
 ## Team Members
 
-<< List team member names >>
+Shawn Healy
 
 ***
 
 ## Project Description
 
-<< Give an overview of your project >>
+The project will be allow the user to play a game of battleship against the AI. Based on the battleship board game, the user and computer will both select where to position their battleships and strike until all ships have been sunk and a player has won. The game will have 3 different difficulties: Easy where the computer shoots completely randomly, Medium where the computer shoots randomly but once it hits a target will shoot next to the previous target, and Hard where it will use the same strategies as medium difficulty and incorporate some strategies such as shooting in the most common places where players put their battlehsips.
 
 ***    
 
@@ -31,11 +27,11 @@
 
 ### Features
 
-1. << Feature 1 >>
-2. << Feature 2 >>
-3. << Feature 3 >>
-4. << Feature 4 >>
-5. << Feature 5 >>
+1. Start Menu
+2. Different Difficulty Levels
+3. Game Over Screen
+4. Basic AI to Play Against
+5. Takes Mouse Inputs from User
 
 ### Classes
 
