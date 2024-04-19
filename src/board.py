@@ -1,12 +1,11 @@
-from cell import Cell
 from ship import Ship
 
 
 class Board:
     def __init__(self, size=10):
         """
-        Initializes the board object. Creates a list of lists to make a 10x10 board consisting of cells. Creates an empty list for ships.
-        Args: size (int): Set to 10; determines the length and width of board
+        Initializes the board object. Creates a list of lists to make a 10x10 board of cell objects and creates an empty list for ships.
+        Arg: size (int): Default is 10; the length and width of board
         Return: None
         """
         self.size = size
@@ -16,21 +15,21 @@ class Board:
 
     def add_ship(self, ship):
         """
-        Uses ship coordinates from ship object to add to self.ships list. Sets these coordinates in grid to ship is present.
-        Args: ship (object): Takes coordinates from this object to set coordinates in grid to ship is present.
+        Appends self.ships list with ship object and assigns corresponding cells to ship
+        Arg: ship (object): Takes coordinates from object and assigns corresponding cell to ship
         Return: None
         """
         self.ships.append(ship)
-        for coord in ship.coordinates:
-            x, y = coord
+        for coordinates in ship.coordinates:
+            x, y = coordinates
             self.grid[x][y].place_ship()
 
 
     def receive_attack(self, coord):
         """
-        Checks to see if attacked coordinate hits a ship and updates the board.
-        Args: coord (tuple): Coordiantes in the grid that are being attacked.
-        Return: True or False depending on if a ship is hit.
+        Checks to see if attacked coordinate hits a ship and updates the board
+        Args coord (tuple): Coordiantes in the grid that are being attacked
+        Return: Boolean value depending on if ship is hit
         """
         x, y = coord
         cell = self.grid[x][y]
@@ -45,8 +44,41 @@ class Board:
         
     def all_sunk(self):
         """
-        Checks to see if all of the ships are sunk which ends the game.
-        Args: None
-        Return: True or False depending on if all ships for a player are sunk.
+        Checks to see if all of the ships are sunk
+        Arg: None
+        Return: Boolean value depending on if all ships are sunk
         """
         return all (ship.is_sunk() for ship in self.ships)
+    
+
+
+class Cell:
+    def __init__(self):
+        """
+        Initializes the cell object that will make the board. Cell starts as not being hit or assigned a ship
+        Args: None
+        Return: None
+        """
+        self.is_ship = False
+        self.is_hit = False
+
+    
+    def place_ship(self):
+        """
+        Used in the add_ship method in Board class to update the cell as having a ship
+        Args: None
+        Return: None
+        """
+        self.is_ship = True
+
+    
+    def hit(self):
+        """
+        Used in the receive_attack method in Board class. Checks if cell has already been hit and if not, updates cell to hit and checks for ship
+        Args: None
+        Return: Boolean value depending on if attacked cell has a ship and has not been hit yet
+        """
+        if not self.is_hit:
+            self.is_hit = True
+            return self.is_ship
+        return False

@@ -1,10 +1,10 @@
 import random
 
-class AI:
+class Ai:
     def __init__(self, board):
         """
-        Initializes AI player, setting up their board and all possible moves.
-        Args: board (object): the board from Board class that the AI will be attacking.
+        Initializes Ai and sets up their board and all possible moves
+        Arg: board (object): the board from Board class that the Ai will be attacking
         Return: None
         """
         self.board = board
@@ -13,9 +13,9 @@ class AI:
     
     def make_move(self):
         """
-        Randomly picks a cell for the AI to attack.
-        Args: None
-        Return: move (tuple) coordinates that the AI is attacking.
+        Randomly picks a cell for the Ai to attack
+        Arg: None
+        Return: move (tuple): coordinates that the Ai is attacking
         """
         move = random.choice(self.possible_moves)
         self.possible_moves.remove(move)
