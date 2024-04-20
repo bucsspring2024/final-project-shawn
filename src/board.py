@@ -37,8 +37,10 @@ class Board:
             for ship in self.ships:
                 if coord in ship.coordinates:
                     ship.hit()
+            print("Hit")
             return True
         else:
+            print("Miss")
             return False
             
         
