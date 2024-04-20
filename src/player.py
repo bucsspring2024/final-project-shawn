@@ -1,8 +1,8 @@
 class Player:
     def __init__(self, board):
         """
-        Initializes board the user will be attacking
-        Arg: board (object): board from the Board class user is attacking
+        Initializes board the user's board
+        Arg: board (object): board from the Board class
         Return: None
         """
         self.board = board

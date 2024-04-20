@@ -12,25 +12,25 @@ class Controller:
         self.ai = Ai(self.ai_board)
         self.current_turn = "player"
         
-        carrier_coord  = (5,1)
-        self.player_carrier = Ship(5, carrier_coord)
-        self.ai_carrier = Ship(5, carrier_coord)
+        carrier_coord  = (4,0)
+        self.player_carrier = Ship(5, "horizontal", carrier_coord)
+        self.ai_carrier = Ship(5, "horizontal", carrier_coord)
 
-        battleship_coord  = (4,2)
-        self.player_battleship = Ship(4, battleship_coord)
-        self.ai_battleship = Ship(4, battleship_coord)
+        battleship_coord  = (3,1)
+        self.player_battleship = Ship(4, "horizontal", battleship_coord)
+        self.ai_battleship = Ship(4, "horizontal", battleship_coord)
 
-        cruiser_coord  = (3,3)
-        self.player_cruiser = Ship(3, cruiser_coord)
-        self.ai_cruiser = Ship(3, cruiser_coord)
+        cruiser_coord  = (2,2)
+        self.player_cruiser = Ship(3, "horizontal", cruiser_coord)
+        self.ai_cruiser = Ship(3, "horizontal", cruiser_coord)
 
-        submarine_coord  = (3,4)
-        self.player_submarine = Ship(3, submarine_coord)
-        self.ai_submarine = Ship(3, submarine_coord)
+        submarine_coord  = (2,3)
+        self.player_submarine = Ship(3, "horizontal", submarine_coord)
+        self.ai_submarine = Ship(3, "horizontal", submarine_coord)
 
-        destroyer_coord  = (2,5)
-        self.player_destroyer = Ship(2, destroyer_coord)
-        self.ai_destroyer = Ship(2, destroyer_coord)
+        destroyer_coord  = (1,4)
+        self.player_destroyer = Ship(2, "horizontal", destroyer_coord)
+        self.ai_destroyer = Ship(2, "horizontal", destroyer_coord)
 
 
         self.state = "menu"
@@ -54,7 +54,7 @@ class Controller:
 
     def game_loop(self):
         self.game_setup()
-        while not self.check_game_over:
+        while self.check_game_over:
             self.play_round()
         print("game over")
 
@@ -71,11 +71,14 @@ class Controller:
     
     def play_round(self):
         if self.current_turn == "player":
-            coord = self.ai.make_move()
-            hit = self.ai.board.receive_attack(coord)
+            move1 = int(input("Enter your first move: "))  # Prompt the user for the first move
+            move2 = int(input("Enter your second move: "))  # Prompt the user for the second move
+            move = (move1, move2)
+            coord = self.player.make_move(move)
+            self.ai.board.receive_attack(coord)
         else:
             coord = self.ai.make_move()
-            hit = self.player.board.receive_attack(coord)
+            self.player.board.receive_attack(coord)
         self.switch_turns()
 
     def switch_turns(self):

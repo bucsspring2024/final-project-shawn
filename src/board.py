@@ -2,43 +2,45 @@ from ship import Ship
 
 
 class Board:
-    def __init__(self, size=10):
+    def __init__(self):
         """
-        Initializes the board object. Creates a list of lists to make a 10x10 board of cell objects and creates an empty list for ships.
-        Arg: size (int): Default is 10; the length and width of board
+        Initializes the board object by creating list of lists, making a 10x10 board of cell objects. Creates an empty list for ships.
+        Args: None
         Return: None
         """
-        self.size = size
-        self.grid = [[Cell() for _ in range(size)] for _ in range(size)]
+        self.size = 10
+        self.grid = [[Cell() for _ in range(self.size)] for _ in range(self.size)]
         self.ships = []
 
 
     def add_ship(self, ship):
         """
         Appends self.ships list with ship object and assigns corresponding cells to ship
-        Arg: ship (object): Takes coordinates from object and assigns corresponding cell to ship
+        Arg: ship (object): Takes coordinates from object and assigns corresponding cells to ship
         Return: None
         """
         self.ships.append(ship)
-        for coordinates in ship.coordinates:
-            x, y = coordinates
+        for coord in ship.coordinates:
+            x, y = coord
             self.grid[x][y].place_ship()
 
 
     def receive_attack(self, coord):
         """
         Checks to see if attacked coordinate hits a ship and updates the board
-        Args coord (tuple): Coordiantes in the grid that are being attacked
-        Return: Boolean value depending on if ship is hit
+        Arg: coord (tuple): Coordiantes on the grid being attacked
+        Return: Boolean value if ship is hit
         """
         x, y = coord
-        cell = self.grid[x][y]
-        if cell.hit():
+        hit = self.grid[x][y].hit()
+        if hit == True:
             for ship in self.ships:
                 if coord in ship.coordinates:
                     ship.hit()
-            print("Hit")
-            return True
+                    print("Hit")
+                    return True
+                if ship.is_sunk() == True:
+                    print("You sunk my battleship")
         else:
             print("Miss")
             return False
@@ -48,16 +50,19 @@ class Board:
         """
         Checks to see if all of the ships are sunk
         Arg: None
-        Return: Boolean value depending on if all ships are sunk
+        Return: Boolean value if all ships are sunk
         """
-        return all (ship.is_sunk() for ship in self.ships)
+        if all (ship.is_sunk() for ship in self.ships) == True:
+            return True
+        else:
+            return False
     
 
 
 class Cell:
     def __init__(self):
         """
-        Initializes the cell object that will make the board. Cell starts as not being hit or assigned a ship
+        Initializes the cell object that makes up the board. Cell starts as not being hit or assigned ship
         Args: None
         Return: None
         """
@@ -67,7 +72,7 @@ class Cell:
     
     def place_ship(self):
         """
-        Used in the add_ship method in Board class to update the cell as having a ship
+        Used in the add_ship method in Board class to update cell to ship
         Args: None
         Return: None
         """
