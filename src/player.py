@@ -11,7 +11,7 @@ class Player:
     def make_move(self, coord):
         """
         Returns the coordinates that the player is attacking
-        Args: coord (tuple) coordinates of cell being attacked
-        Return: coord (tuple) coordinates of cell being attacked
+        Args: coord (tuple of ints) coordinates of cell being attacked
+        Return: coord (tuple of ints) coordinates of cell being attacked
         """
         return coord

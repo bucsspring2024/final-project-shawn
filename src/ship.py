@@ -4,7 +4,7 @@ class Ship:
         Initializes ship object. Sets size/orientation and sets all coordinates in list based on front_coord assuming ship is facing either right or up.
         Arg: size (int): number of cells ship occupies
         Arg: orientation (str): either vertical or horizontal; determines direction ship is facing
-        Arg: front_coord (tuple): coordinates of the front of the ship which is facing either right or up
+        Arg: front_coord (tuple of ints): coordinates of the front of the ship which is facing either right or up
         Return: None
         """
         self.size = size

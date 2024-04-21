@@ -54,7 +54,7 @@ class Controller:
 
     def game_loop(self):
         self.game_setup()
-        while self.check_game_over:
+        while self.check_game_over() == False:
             self.play_round()
         print("game over")
 

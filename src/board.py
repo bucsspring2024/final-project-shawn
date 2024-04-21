@@ -28,19 +28,18 @@ class Board:
     def receive_attack(self, coord):
         """
         Checks to see if attacked coordinate hits a ship and updates the board
-        Arg: coord (tuple): Coordiantes on the grid being attacked
+        Arg: coord (tuple of ints): Coordiantes on the grid being attacked
         Return: Boolean value if ship is hit
         """
         x, y = coord
-        hit = self.grid[x][y].hit()
-        if hit == True:
+        if self.grid[x][y].hit():
             for ship in self.ships:
                 if coord in ship.coordinates:
                     ship.hit()
                     print("Hit")
+                    if ship.is_sunk():
+                        print("You sunk my battleship")
                     return True
-                if ship.is_sunk() == True:
-                    print("You sunk my battleship")
         else:
             print("Miss")
             return False
@@ -52,10 +51,10 @@ class Board:
         Arg: None
         Return: Boolean value if all ships are sunk
         """
-        if all (ship.is_sunk() for ship in self.ships) == True:
-            return True
-        else:
-            return False
+        for ship in self.ships:
+            if not ship.is_sunk():
+                return False
+        return True
     
 
 
