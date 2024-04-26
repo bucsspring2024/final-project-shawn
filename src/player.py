@@ -1,7 +1,7 @@
 class Player:
     def __init__(self, board):
         """
-        Initializes board the user's board
+        Initializes the user's board
         Arg: board (object): board from the Board class
         Return: None
         """
