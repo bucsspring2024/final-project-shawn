@@ -1,115 +1,65 @@
+import pygame
+import pygame_menu
+from ship import Ship
 from board import Board
 from player import Player
 from ai import Ai
-from ship import Ship
-
 
 class Controller:
     def __init__(self):
-        self.player_board = Board()
-        self.ai_board = Board()
-        self.player = Player(self.player_board)
-        self.ai = Ai(self.ai_board)
-        self.current_turn = "player"
-        
-        carrier_coord  = (4,0)
-        self.player_carrier = Ship(5, "horizontal", carrier_coord)
-        self.ai_carrier = Ship(5, "horizontal", carrier_coord)
+        pygame.init()
 
-        battleship_coord  = (3,1)
-        self.player_battleship = Ship(4, "horizontal", battleship_coord)
-        self.ai_battleship = Ship(4, "horizontal", battleship_coord)
+        self.screen = pygame.display.set_mode((800, 600))  # Set a default window size
+        self.width, self.height = pygame.display.get_window_size()
 
-        cruiser_coord  = (2,2)
-        self.player_cruiser = Ship(3, "horizontal", cruiser_coord)
-        self.ai_cruiser = Ship(3, "horizontal", cruiser_coord)
+        self.state = "MENU"
+        self.menu = self.create_menu()  # Create the menu during initialization
 
-        submarine_coord  = (2,3)
-        self.player_submarine = Ship(3, "horizontal", submarine_coord)
-        self.ai_submarine = Ship(3, "horizontal", submarine_coord)
+    def create_menu(self):
+        # Define the menu and its elements here
+        menu = pygame_menu.Menu("Start Menu", self.width, self.height, theme=pygame_menu.themes.THEME_BLUE)
+        menu.add.label("Welcome to Battleship!", max_char=-1, font_size=20)
+        menu.add.button('Play', self.start_game)
+        menu.add.button('Quit', pygame_menu.events.EXIT)
+        return menu
 
-        destroyer_coord  = (1,4)
-        self.player_destroyer = Ship(2, "horizontal", destroyer_coord)
-        self.ai_destroyer = Ship(2, "horizontal", destroyer_coord)
-
-
-        self.state = "menu"
-    
+    def start_game(self):
+        self.state = "GAME"
+        # Additional setup before starting the game can be added here
 
     def mainloop(self):
         while True:
-            if self.state == "menu":
-                self.menu_loop()
-            elif self.state == "game":
-                self.game_loop()
+            if self.state == "MENU":
+                self.menu.mainloop(self.screen)  # Display the menu
+            elif self.state == "GAME":
+                self.gameloop()
+            elif self.state == "GAMEOVER":
+                self.gameoverloop()
             else:
-                self.end_loop()
-    
-    
+                # Handle unexpected states or exit
+                break
 
-    def menu_loop(self):
+    def gameloop(self):
+        # Game loop logic goes here
         pass
 
+    def gameoverloop(self):
+        # Create a simple game over screen
+        gameover_menu = pygame_menu.Menu('Game Over', self.width, self.height, theme=pygame_menu.themes.THEME_BLUE)
+        
+        gameover_menu.add.label("Congratulations, you've completed the game!", max_char=-1, font_size=20)
+        gameover_menu.add.button('Play Again', self.restart_game)
+        gameover_menu.add.button('Exit', pygame_menu.events.EXIT)
 
+        gameover_menu.mainloop(self.screen)
 
-    def game_loop(self):
-        self.game_setup()
-        while self.check_game_over() == False:
-            self.play_round()
-        print("game over")
+    def restart_game(self):
+        # Reset game state and start over
+        self.state = "MENU"
+        self.menu = self.create_menu()  # Re-create the menu
+        self.menu.mainloop(self.screen)  # Display the menu
 
-    
-    def end_loop(self):
-        pass
-
-
-
-    def game_setup(self):
-        self.set_player_ships()
-        self.set_ai_ships()
-
-    
-    def play_round(self):
-        if self.current_turn == "player":
-            move1 = int(input("Enter your first move: "))  # Prompt the user for the first move
-            move2 = int(input("Enter your second move: "))  # Prompt the user for the second move
-            move = (move1, move2)
-            coord = self.player.make_move(move)
-            self.ai.board.receive_attack(coord)
-        else:
-            coord = self.ai.make_move()
-            self.player.board.receive_attack(coord)
-        self.switch_turns()
-
-    def switch_turns(self):
-        self.current_turn = "ai" if self.current_turn == "player" else "player"
-
-    def check_game_over(self):
-        if self.player.board.all_sunk():
-            return True
-        elif self.ai.board.all_sunk():
-            return True
-        else:
-            return False
-    
-    def set_player_ships(self):
-        self.player_board.add_ship(self.player_carrier)
-        self.player_board.add_ship(self.player_destroyer)
-        self.player_board.add_ship(self.player_submarine)
-        self.player_board.add_ship(self.player_battleship)
-        self.player_board.add_ship(self.player_cruiser)
-
-
-
-    def set_ai_ships(self):
-        self.ai_board.add_ship(self.ai_carrier)
-        self.ai_board.add_ship(self.ai_destroyer)
-        self.ai_board.add_ship(self.ai_submarine)
-        self.ai_board.add_ship(self.ai_cruiser)
-        self.ai_board.add_ship(self.ai_battleship)
-
-
-
-
-game = Controller()
-game.game_loop()
+# Run the game
+if __name__ == '__main__':
+    controller = Controller()
+    controller.mainloop()
