@@ -29,19 +29,15 @@ class Board:
         """
         Checks to see if attacked coordinate hits a ship and updates the board
         Arg: coord (tuple of ints): Coordiantes on the grid being attacked
-        Return: Boolean value if ship is hit
+        Return: (boolean) if ship is hit
         """
         x, y = coord
         if self.grid[x][y].hit():
             for ship in self.ships:
                 if coord in ship.coordinates:
                     ship.hit()
-                    print("Hit")
-                    if ship.is_sunk():
-                        print("You sunk my battleship")
                     return True
         else:
-            print("Miss")
             return False
             
         
@@ -49,7 +45,7 @@ class Board:
         """
         Checks to see if all of the ships are sunk
         Arg: None
-        Return: Boolean value if all ships are sunk
+        Return: (boolean) if all ships are sunk
         """
         for ship in self.ships:
             if not ship.is_sunk():
@@ -61,7 +57,7 @@ class Board:
 class Cell:
     def __init__(self):
         """
-        Initializes the cell object that makes up the board. Cell starts as not being hit or assigned ship
+        Initializes cell object that makes up the board. Cell starts as not being hit or assigned ship
         Args: None
         Return: None
         """
@@ -82,7 +78,7 @@ class Cell:
         """
         Used in the receive_attack method in Board class. Checks if cell has already been hit and if not, updates cell to hit and checks for ship
         Args: None
-        Return: Boolean value depending on if attacked cell has a ship and has not been hit yet
+        Return: (boolean) if attacked cell is ship and not been hit yet
         """
         if not self.is_hit:
             self.is_hit = True

@@ -8,6 +8,7 @@ class Player:
         self.board = board
 
     
+    
     def make_move(self, coord):
         """
         Returns the coordinates that the player is attacking

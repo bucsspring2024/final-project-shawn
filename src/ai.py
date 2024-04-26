@@ -4,13 +4,13 @@ class Ai:
     def __init__(self, board):
         """
         Initializes Ai and sets up their board and all possible moves
-        Arg: board (object): the board from Board class that the Ai will be attacking
+        Arg: board (object): board from the Board class
         Return: None
         """
         self.board = board
         self.possible_moves = [(x, y) for x in range(board.size) for y in range(board.size)]
 
-    
+
     def make_move(self):
         """
         Randomly picks a cell for the Ai to attack
