@@ -28,4 +28,4 @@ class Ship:
         Args: None
         Return: (boolean) if ship is sunk
         """
-        return self.hits == self.size
+        return self.hits >= self.size

@@ -1,9 +1,17 @@
 import pygame
 from src.controller import Controller
+import pygame_menu
+from src.ship import Ship
+from src.board import Board
+from src.player import Player
+from src.ai import Ai
+from sys import exit
+
 
 def main():
     pygame.init()
     game = Controller()
+    game.mainloop()
 
 main()
     
