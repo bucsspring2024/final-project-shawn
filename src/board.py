@@ -1,4 +1,4 @@
-from ship import Ship
+from src.ship import Ship
 
 
 class Board:
