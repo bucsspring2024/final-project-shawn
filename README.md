@@ -7,12 +7,20 @@ Shawn Healy
 
 ## Project Description
 
-This project will allow the user to play a game of the classic board game, Battleship, against an AI. You will be prompted to choose between an easy and hard difficulty: in the easy mode, the AI will fire completely randomly with no strategy and in the hard mode it will fire randomly at first, but once it has hit its target it will use an algorithm to sink the ship in the most efficient manner possible. Before the game begins, the user will be prompted to place their ships by clicking on the cell they want and hitting enter and then the Ai will do the same. The player and Ai will alternate attacks until one player's entire fleet is sunk and a player has been declared the winner which will create an ending screen for the game.
+This project will allow the user to play a game of the classic board game, Battleship, against an Ai which fires completely randomly. Once the game is started through the main menu, there will be two grids: the one on the left, which you are attacking, and the one on the right, which has your ships, which have already been placed for you. You will shoot first by clicking on a cell on the grid to the left, and it will either turn green if you have hit a ship or red if you have missed. There will be a 2 second delay and then the Ai will take its turn, and you will alternate until a player has won. Once you or the Ai has sunk all 5 of the opponents ships (17 cells) the game will end, and an end screen will pop up. There will also be a button on the main menu that when pressed will display the current high score (lowest amount of shots to win).
 
 ### Additional Modules Used
 
 pygame-menu: https://pygame-menu.readthedocs.io/en/latest/
 
+
+### Class Diagram Relationship
+
+![class_diagram_relationship](assets/class_diagram.jpg)
+
+### Data Permanence Feature
+
+An external file that keeps track of the high score for the game. Can be displayed through beginning or end menus
 
 ## GUI Design
 
@@ -29,77 +37,78 @@ pygame-menu: https://pygame-menu.readthedocs.io/en/latest/
 ### Features
 
 1. Start Menu
-2. 2 Difficulty Levels
-3. Game Over Screen
-4. Data Permanence Feature: Saves High Score (Lowest amount of moves it took to win)
-5. Ship Placing
+2. Game Over Menu
+3. Click on Opponent Cell to Attack it
+4. Basic Ai to play against (fires randomly)
+5. Data Permanence Feature: Displays current high score
 
 ### Classes
 
-- Board:
-- Cell:
-- Ship:
-- Ai:
-- Player:
-- Controller:
+Ship: This class handles all of the information regarding the individual ships themselves. This class keeps track of each ships size, coordinates on the grid, its current hits and whether the ship has been sunk yet.
+
+Cell: This class handles all of the data for the individual cells and is closely related to the Board class so they are in the same file. The cell class keeps track of whether each cell individually has been hit yet and if it has a ship on the cell.
+
+Board: This class takes in data from both the cell and ship classes to handle all of the data for the boards. The board is made up of a a list of lists of cell objects and has the methods add_ship where it takes in ship object as an argument and assigns all the cells accordingly. It has the receive_attack method which takes in the coordianes of the attacked cell as a argument and updates the board accordingly. It also has the game over condition all_sunk method which checks if a player has won by sinking all the ships.
+
+Player: This is a very simple class that takes in a board object and keeps track of the player's board and all of their attacks by simply returning the argument which is the cell they are attacking.
+
+Ai: This class is very similar to the Player class but it keeps track of all the possible moves the Ai can make. The Ai then makes a completely random move and removes that move from their possible moves to prevent repeats.
+
+Controller: This class takes in all 5 of the other classes data and using the MVC style, draws all the display elements using pygame like the background, grid and ships. It sets up the main menu, end menu and also high score feature. It constantly checks for user input to see what cell they are attacking and updates the board with the player and ai's attacks while ending the game when a player has won.
 
 ## ATP
 
-### Test #1: Test Start and Difficulty Buttons
+### Test #1: Test Start Button
 
 - Step 1: Start Game
-  - Open terminal, go to project folder, type: python main..py
+  - Open terminal, go to project folder, type: python main.py
   - Click on start button
-  - Click on either easy or hard
 - **Expected Outcome**
-  - Two grids should appear with an ocean background and you should be prompted to place your carrier
+  - After clicking on the start button, the main menu should close and you should see the main game screen which has an ocean background and 2 grids one labeled player, and one labeled opponent. On the player grid, you should see 5 ships have already been placed for you.
 
 
-### Test #2: Test Data Permanence Feature: High Score
+### Test #2: Test Attacking Cells
 
 - Step 1: Start Game
-  - Open terminal, go to project folder, type: python main..py
-  - Click on high score button
+  - Open terminal, go to project folder, type: python main.py
+  - Click on start button 
+- Step 2: Attack Cell
+  - To attack a cell, you simply click on any cell on the left grid
 - **Expected Outcome**
-  - A new menu will appear which displays the current high score, which is the least amount of turns a user has won in (minimum score possible is 17)
-  - If the user breaks the high score while playing, this should update and they can view it after
+  - There are two possible outcomes to this:
+    1. If you have successfully hit a ship, the cell will turn green
+    2. If you have missed, then the cell will turn red
 
 
-### Test #3: Test Placing Ships
+### Test #3: Test Ai Opponent
 
 - Step 1: Start Game
-  - Open terminal, go to project folder, type: python main..py
-  - Click on start button
-  - click on either easy or hard
-- Step 2: Place ship
-  - Click on 5 consecutive squares and hit enter
+  - Open terminal, go to project folder, type: python main.py
+  - Click on start button 
+- Step 2: Attack Cell
+  - To attack a cell, you simply click on any cell on the left grid
+- Step 3: Wait for Ai response
 - **Expected Outcome**
-  - The squares you selected will first turn green and then when five have been selected and you hit enter, a ship should appear in those cells
-  - This process should work for all 5 ships which vary in length
+  - After you have attacked a cell and it has changed colors, there will be a two second pause and then the Ai will randomly fire. You will either see a cell that wasn't occuppied by a ship turn red, or if the Ai has successfully hit a ship then one cell on that ship will turn green.
 
 
 ### Test #4: Test Game Over Screen
 
 - Step 1: Start Game
-  - Open terminal, go to project folder, type: python main..py
-  - Click on start button
-  - Click on either easy or hard
-- Step 2: Place ships
-  - Use the steps from test 3 to place all five ships as prompted
-- Step 3: When prompted alternate attacking with the Ai until the game is over by clicking on the cell you want to attack
+  - Open terminal, go to project folder, type: python main.py
+  - Click on start button 
+- Step 2: Attack Cell
+  - To attack a cell, you simply click on any cell on the left grid
+- Step 3: Wait for Ai response
+- Repeat steps 2-3 until game is over
 - **Expected Outcome**
-  - If you have sunk all the Ai's ships then you have won the game and a new screen will appear telling you that you have won
-  - If the Ai has sunk all of your ships, then the game will end a screen will appear telling you that you have lost.
+  - After alternating turns with the Ai, once a player has successfully sunk all of their opponents battleships, the window will close and a new end game menu will open saying that you have either won or lost depending on who won the game.
 
 
-  ### Test #5: Testing Medium Difficulty
+  ### Test #5: High Score Feature
 
-- Step 1: Start Game
-  - Open terminal, go to project folder, type: python main..py
-  - Click on start button
-  - Click on medium
-- Step 2: Place ships
-  - Use the steps from test 3 to place all five ships as prompted
-- Step 3: When prompted alternate attacking with the Ai by clicking the cell you want to attack
+- Step 1: Start Game and click on High Score
+  - Open terminal, go to project folder, type: python main.py
+  - Click on the high score button
 - **Expected Outcome**
-  - Based on the algorithm, once the Ai has randomly hit one of your ships they should begin by shooting at the cell next to it. Once the first hit is recorded is should take at maximum number of tries to sink the ship as its length + 2
+  - When you hit the high score button, a new menu should open telling you the current high score which will update depending on the current high score.
