@@ -20,7 +20,7 @@ pygame-menu: https://pygame-menu.readthedocs.io/en/latest/
 
 ### Data Permanence Feature
 
-An external file that keeps track of the high score for the game. Can be displayed through beginning or end menus
+An external file that keeps track of the high score for the game. Can be displayed through the main menu before the game
 
 ## GUI Design
 
