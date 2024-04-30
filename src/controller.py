@@ -17,8 +17,14 @@ class Controller():
         self.state = "MENU"
 
         self.font = pygame.font.Font(None, 75)
+        self.font2 = pygame.font.Font(None, 35)
         self.background = pygame.image.load("../assets/background.jpg")
         self.current_turn = "player"
+
+        self.menu = pygame_menu.Menu("Start Menu", self.width, self.height, theme=pygame_menu.themes.THEME_BLUE)
+        self.menu.add.label("Welcome to Battleship!", max_char = -1, font_size = 20)
+        self.menu.add.button("Play", self.start_game)
+        self.menu.add.button("Quit", pygame_menu.events.EXIT)
 
     def background_setup(self):
         title_surface = self.font.render("Battleship", False, "Black")
@@ -61,6 +67,27 @@ class Controller():
                 row_cells.append(pygame.Rect(x, y, cell_size, cell_size))
             player_cells.append(row_cells)
 
+        carrier  = pygame.image.load("../assets/carrier.jpg")
+        battleship  = pygame.image.load("../assets/battleship.jpg")
+        cruiser  = pygame.image.load("../assets/cruiser.jpg")
+        destroyer = pygame.image.load("../assets/destroyer.jpg")
+        submarine  = pygame.image.load("../assets/submarine.jpg")
+
+        carrier = pygame.transform.scale(carrier, (5 * cell_size, cell_size))
+        carrier = pygame.transform.rotate(carrier, 90)
+        battleship = pygame.transform.scale(battleship, (4 * cell_size, cell_size))
+        destroyer = pygame.transform.scale(destroyer, (3 * cell_size, cell_size))
+        destroyer = pygame.transform.rotate(destroyer, 90)
+        cruiser = pygame.transform.scale(cruiser, (3 * cell_size, cell_size))
+        submarine = pygame.transform.scale(submarine, (2 * cell_size, cell_size))
+        submarine = pygame.transform.rotate(submarine, 90)
+
+        self.screen.blit(carrier, (8 * cell_size + ai_grid_offset, 1 * cell_size + grid_margin + 120))
+        self.screen.blit(battleship, (2 * cell_size + ai_grid_offset, 9 * cell_size + grid_margin + 120))
+        self.screen.blit(destroyer, (1 * cell_size + ai_grid_offset, 1 * cell_size + grid_margin + 120))
+        self.screen.blit(cruiser, (4 * cell_size + ai_grid_offset, 0 * cell_size + grid_margin + 120))
+        self.screen.blit(submarine, (5 * cell_size + ai_grid_offset, 6 * cell_size + grid_margin + 120))
+
         
         carrier = Ship(5, ((8,1), (8,2), (8,3), (8,4), (8,5)))
         battleship = Ship(4, ((2,9), (3,9), (4,9), (5,9)))
@@ -88,7 +115,17 @@ class Controller():
         player = Player(player_board)
         ai = Ai(ai_board)
 
+        player_turn_surface = self.font2.render("Your Turn: Shoot any Cell on the Grid", False, "Black")
+        player_hit_surface = self.font2.render("Hit", False, "Black")
+        player_miss_surface = self.font2.render("Miss", False, "Black")
+        player_battleship_sunk_surface = self.font2.render("Battleship Sunk", False, "Black") 
 
+        ai_turn_surface = self.font2.render("Computer's Turn", False, "Black")
+        ai_hit_surface = self.font2.render("Hit", False, "Black")
+        ai_miss_surface = self.font2.render("Miss", False, "Black")
+        ai_battleship_sunk_surface = self.font2.render("Your Battleship has been sunk", False, "Black")
+
+        number_of_moves = 0
         
         running = True
         while running:
@@ -108,11 +145,14 @@ class Controller():
                                 if ai_board.receive_attack(player_move) == True:
                                     self.current_turn = "ai"
                                     pygame.draw.rect(self.screen, "green", cell)
+                                    number_of_moves += 1
                                 elif ai_board.receive_attack(player_move)==False:
                                     self.current_turn = "ai"
                                     pygame.draw.rect(self.screen, "red", cell)
+                                    number_of_moves +=1
                                     
                 elif self.current_turn == "ai":
+                    pygame.time.wait(2000)
                     ai_move = ai.make_move()
                     ai_col, ai_row = ai_move
                     if player_board.receive_attack(ai_move) == True:
@@ -124,10 +164,10 @@ class Controller():
 
             if player_board.all_sunk():
                 running = False
-                self.state = "MENU"
+                self.state = "LOSE"
             elif ai_board.all_sunk():
                 running = False
-                self.state = "MENU"
+                self.state = "WIN"
 
 
 
@@ -139,23 +179,22 @@ class Controller():
                 self.menuloop()
             elif self.state == "GAME":
                 self.gameloop()
+            elif self.state == "WIN":
+                self.winloop()
+            elif self.state == "LOSE":
+                self.loseloop()
             
 
 
     def menuloop(self):
-            
-            menu = pygame_menu.Menu("Start Menu", self.width, self.height, theme=pygame_menu.themes.THEME_BLUE)
-            menu.add.label("Welcome to Battleship!", max_char = -1, font_size = 20)
-            menu.add.button("Play", self.start_game)
-            menu.add.button("Quit", self.exit_menu)
-            menu.mainloop(self.screen, disable_loop=True)
+            self.menu.mainloop(self.screen)
             pygame.display.flip()
 
-    def exit_menu(self):
-        exit()
 
     def start_game(self):
         self.state = "GAME"
 
+      
+
 controller = Controller()
-controller.mainloop()
+controller.gameloop()
