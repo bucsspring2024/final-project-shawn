@@ -8,8 +8,7 @@ class Player:
         self.board = board
 
     
-    
-    def make_move(self, coord):
+    def make_move(self, coord=(0,0)):
         """
         Returns the coordinates that the player is attacking
         Args: coord (tuple of ints) coordinates of cell being attacked

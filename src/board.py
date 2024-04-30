@@ -25,7 +25,7 @@ class Board:
             self.grid[x][y].place_ship()
 
 
-    def receive_attack(self, coord):
+    def receive_attack(self, coord=(0,0)):
         """
         Checks to see if attacked coordinate hits a ship and updates the board
         Arg: coord (tuple of ints): Coordiantes on the grid being attacked

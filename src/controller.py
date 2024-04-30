@@ -115,16 +115,6 @@ class Controller():
         player = Player(player_board)
         ai = Ai(ai_board)
 
-        player_turn_surface = self.font2.render("Your Turn: Shoot any Cell on the Grid", False, "Black")
-        player_hit_surface = self.font2.render("Hit", False, "Black")
-        player_miss_surface = self.font2.render("Miss", False, "Black")
-        player_battleship_sunk_surface = self.font2.render("Battleship Sunk", False, "Black") 
-
-        ai_turn_surface = self.font2.render("Computer's Turn", False, "Black")
-        ai_hit_surface = self.font2.render("Hit", False, "Black")
-        ai_miss_surface = self.font2.render("Miss", False, "Black")
-        ai_battleship_sunk_surface = self.font2.render("Your Battleship has been sunk", False, "Black")
-
         number_of_moves = 0
         
         running = True

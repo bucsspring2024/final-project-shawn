@@ -1,5 +1,5 @@
 class Ship:
-    def __init__(self, size, coordinates):
+    def __init__(self, size=3, coordinates=((0,0),(0,1),(0,2))):
         """
         Initializes ship object. Sets size and coordinates, starts hits at 0.
         Arg: size (int): number of cells ship occupies
@@ -9,7 +9,6 @@ class Ship:
         self.size = size
         self.coordinates = coordinates
         self.hits = 0
-    
     
 
     def hit(self):
@@ -21,7 +20,6 @@ class Ship:
         self.hits += 1
     
     
-
     def is_sunk(self):
         """
         Checks if ship is sunk
