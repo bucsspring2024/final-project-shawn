@@ -13,11 +13,6 @@ This project will allow the user to play a game of the classic board game, Battl
 
 pygame-menu: https://pygame-menu.readthedocs.io/en/latest/
 
-
-### Class Diagram Relationship
-
-![class_diagram_relationship](assets/class_diagram.jpg)
-
 ### Data Permanence Feature
 
 An external file that keeps track of the high score for the game. Can be displayed through the main menu before the game
@@ -31,6 +26,11 @@ An external file that keeps track of the high score for the game. Can be display
 ### Final Design
 
 ![final gui](assets/finalgui.jpg)
+![final gui](assets/finalgui2.jpg)
+![final gui](assets/finalgui3.jpg)
+![final gui](assets/finalgui4.jpg)
+![final gui](assets/finalgui5.jpg)
+
 
 ## Program Design
 

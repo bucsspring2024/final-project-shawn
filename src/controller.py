@@ -23,41 +23,143 @@ class Controller():
         self.current_turn = "player"
 
 
+
         self.font = pygame.font.Font(None, 75)
         self.background = pygame.image.load("./assets/background.jpg")
-        title_surface = self.font.render("Battleship", False, "Black")
-        player_surface = self.font.render("Player", False, "Black")
-        opponent_surface = self.font.render("Opponent", False, "Black")
+        self.title_surface = self.font.render("Battleship", False, "Black")
+        self.player_surface = self.font.render("Player", False, "Black")
+        self.opponent_surface = self.font.render("Opponent", False, "Black")
     
-        self.screen.blit(self.background, (0,0))
-        self.screen.blit(title_surface, (self.width/2.5 + 25, self.height/12))
-        self.screen.blit(player_surface, (self.width/1.4, self.height/1.08))
-        self.screen.blit(opponent_surface, (self.width/5.8, self.height/1.08))
+        
 
-
-        self.menu = pygame_menu.Menu("Start Menu", self.width, self.height, theme=pygame_menu.themes.THEME_BLUE)
+        self.menu = pygame_menu.Menu("Start Menu", self.width, self.height, theme=pygame_menu.themes.THEME_SOLARIZED)
         self.menu.add.label("Welcome to Battleship!", max_char = -1, font_size = 20)
         self.menu.add.button("Play", self.start_game)
         self.menu.add.button("Quit", pygame_menu.events.EXIT)
+        self.menu.add.button("High Score", self.start_high_score_menu_screen)
+
+        self.win_menu = pygame_menu.Menu("Game Over", self.width, self.height, theme=pygame_menu.themes.THEME_SOLARIZED)
+        self.win_menu.add.label("Congatulations, You Won", max_char = -1, font_size = 20)
+        self.win_menu.add.button("Play Again", self.start_game)
+        self.win_menu.add.button("Quit", pygame_menu.events.EXIT)
+
+        self.lose_menu = pygame_menu.Menu("Game Over", self.width, self.height, theme=pygame_menu.themes.THEME_SOLARIZED)
+        self.lose_menu.add.label("You Lost, Better Luck Next Time", max_char = -1, font_size = 20)
+        self.lose_menu.add.button("Play Again", self.start_game)
+        self.lose_menu.add.button("Quit", pygame_menu.events.EXIT)
+
+
+        self.high_score_file = open("./assets/high_score.txt", "r")
+        self.high_score = self.high_score_file.read()
+        self.high_score_file.close()
+    
+        self.high_score_menu = pygame_menu.Menu("High Score", self.width, self.height, theme=pygame_menu.themes.THEME_SOLARIZED)
+        self.high_score_menu.add.label(f"Current High Score: {self.high_score} moves ", max_char = -1, font_size = 20)
+        self.high_score_menu.add.button("Play Again", self.start_game)
+        self.high_score_menu.add.button("Quit", pygame_menu.events.EXIT)
+
 
 
 
     def menuloop(self):
-            self.menu.mainloop(self.screen)
+        '''
+        Draws and updates menu screen
+        Args: None
+        Return: Nothing
+        '''
+        while self.state == "MENU":
+            if self.menu.is_enabled():
+                events = pygame.event.get()
+                for event in events:
+                    if event.type == pygame.QUIT:
+                        exit()
+                self.menu.update(events)
+                self.menu.draw(self.screen)
             pygame.display.flip()
     
+
     def start_game(self):
+        '''
+        Used in the menus to start the game
+        Args: None
+        Return: Nothing
+        '''
         self.state = "GAME"
+
+
+
+    def winloop(self):
+        '''
+        Draws and updates the menu after winning a game
+        Args: None
+        Return: Nothing
+        '''
+        while self.state == "WIN":
+            if self.win_menu.is_enabled():
+                events = pygame.event.get()
+                for event in events:
+                    if event.type == pygame.QUIT:
+                        exit()
+                self.win_menu.update(events)
+                self.win_menu.draw(self.screen)
+            pygame.display.flip()
+
+    def loseloop(self):
+        '''
+        Draws and updates the menu after losing a game
+        Args: None
+        Return: Nothing
+        '''
+        while self.state == "LOSE":
+            if self.lose_menu.is_enabled():
+                events = pygame.event.get()
+                for event in events:
+                    if event.type == pygame.QUIT:
+                        exit()
+                self.lose_menu.update(events)
+                self.lose_menu.draw(self.screen)
+            pygame.display.flip()
+
+
+
+    def high_score_loop(self):
+        '''
+        Draws and updates the menu screen for viewing the current high score
+        Args: None
+        Return: Nothing
+        '''
+        while self.state == "HIGHSCORE":
+            if self.high_score_menu.is_enabled():
+                events = pygame.event.get()
+                for event in events:
+                    if event.type == pygame.QUIT:
+                        exit()
+                self.high_score_menu.update(events)
+                self.high_score_menu.draw(self.screen)
+            pygame.display.flip()
+
+    def start_high_score_menu_screen(self):
+        '''
+        Used in the starting menu to switch the screen to high score menu
+        Args: None
+        Return: Nothing
+        '''
+        self.state = "HIGHSCORE"
 
 
 
 
     def gameloop(self):
         '''
-        Sets up gameloop needed for gameplay. Draws and updates grid' places ship images that depend on grid. Checks for user events and contains game logic to update screen and progress game forward
+        Sets up gameloop needed for gameplay. Draws and updates background, grid and places ship images that depend on grid. Checks for user events and contains game logic to update screen and progress game forward. Keeps track of number of moves and updates high score if broken.
         Args: None
         Return: Nothing
         '''
+        self.screen.blit(self.background, (0,0))
+        self.screen.blit(self.title_surface, (self.width/2.5 + 25, self.height/12))
+        self.screen.blit(self.player_surface, (self.width/1.4, self.height/1.08))
+        self.screen.blit(self.opponent_surface, (self.width/5.8, self.height/1.08))
+
         grid_size = 10
         cell_size = 60
         grid_margin = 75
@@ -84,7 +186,6 @@ class Controller():
 
 
 
-
         carrier  = pygame.image.load("./assets/carrier.jpg")
         battleship  = pygame.image.load("./assets/battleship.jpg")
         cruiser  = pygame.image.load("./assets/cruiser.jpg")
@@ -108,7 +209,6 @@ class Controller():
 
 
 
-        
         carrier_size = 5
         battleship_size = 4
         destroyer_size = 3
@@ -148,7 +248,7 @@ class Controller():
 
 
 
-        
+        number_of_moves = 0
         running = True
         while running:
             for event in pygame.event.get():
@@ -167,9 +267,11 @@ class Controller():
                                 if ai_board.receive_attack(player_move) == True:
                                     self.current_turn = "ai"
                                     pygame.draw.rect(self.screen, "green", cell)
+                                    number_of_moves += 1
                                 elif ai_board.receive_attack(player_move)==False:
                                     self.current_turn = "ai"
                                     pygame.draw.rect(self.screen, "red", cell)
+                                    number_of_moves += 1
                                     
                 elif self.current_turn == "ai":
                     pygame.time.wait(2000)
@@ -194,14 +296,24 @@ class Controller():
             pygame.display.flip()
 
 
+        high_score_file = open("./assets/high_score.txt", "r")
+        high_score = high_score_file.read()
+        high_score_file.close()
+        high_score = int(high_score)
+
+        if number_of_moves < high_score:
+            high_score_file = open("./assets/high_score.txt", "w")
+            high_score_file.write(str(number_of_moves))
+            high_score_file.close()
+
 
 
 
     def mainloop(self):
         '''
-        Determines state of the game; whether its in gameplay or a menu
+        Determines state of the game; whether its in gameplay or in a menu
         Args: None
-        Return: Nothings
+        Return: Nothing
         '''
         while True:
             if self.state == "MENU":
@@ -212,11 +324,5 @@ class Controller():
                 self.winloop()
             elif self.state == "LOSE":
                 self.loseloop()
-
-
-
-    def winloop(self):
-        pass
-
-    def loseloop(self):
-        pass
+            elif self.state == "HIGHSCORE":
+                self.high_score_loop()
