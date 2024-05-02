@@ -27,7 +27,7 @@ An external file that keeps track of the high score for the game. Can be display
 
 ![final gui](assets/finalgui.jpg)
 ![final gui](assets/finalgui2.jpg)
-![final gui](assets/finalgui3.jpg)
+![final gui](assets/finalgui2.jpg)
 ![final gui](assets/finalgui4.jpg)
 ![final gui](assets/finalgui5.jpg)
 
